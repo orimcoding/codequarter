@@ -1,0 +1,62 @@
+name: AI Issue Generator
+
+on:
+  workflow_dispatch:
+    inputs:
+      title_prefix:
+        description: Prefix to add to generated issue titles
+        required: false
+        default: "ai"
+      max_issues:
+        description: Maximum number of issues to create
+        required: false
+        default: "5"
+  push:
+    branches:
+      - ci
+    paths:
+      - README.md
+      - docs/**
+      - src/**
+      - package.json
+      - tsconfig.json
+      - .github/workflows/issue-generator.yml
+
+jobs:
+  generate-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create issue payloads
+        env:
+          TITLE_PREFIX: ${{ github.event.inputs.title_prefix || vars.ISSUE_GENERATOR_TITLE_PREFIX || 'ai' }}
+          MAX_ISSUES: ${{ github.event.inputs.max_issues || vars.ISSUE_GENERATOR_MAX_ISSUES || '5' }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4.1-mini' }}
+          ISSUE_GENERATOR_TITLE_PREFIX: ${{ vars.ISSUE_GENERATOR_TITLE_PREFIX || 'ai' }}
+          ISSUE_GENERATOR_MAX_ISSUES: ${{ vars.ISSUE_GENERATOR_MAX_ISSUES || '5' }}
+        run: |
+          node .github/scripts/generate-issues.mjs
+
+      - name: Create GitHub issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          node .github/scripts/create-issues.mjs
