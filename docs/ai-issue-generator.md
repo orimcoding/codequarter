@@ -11,6 +11,23 @@ It can run:
 - manually with `workflow_dispatch`
 - automatically on pushes to the `ci` branch for selected paths
 
+## Modes
+
+### Hosted mode
+
+If `OPENAI_API_KEY` is configured, the workflow uses OpenAI to generate issue payloads.
+
+Recommended variables:
+
+- secret: `OPENAI_API_KEY`
+- variable: `OPENAI_MODEL` default `gpt-4.1-mini`
+- variable: `ISSUE_GENERATOR_TITLE_PREFIX`
+- variable: `ISSUE_GENERATOR_MAX_ISSUES`
+
+### Fallback mode
+
+If `OPENAI_API_KEY` is not configured, the workflow falls back to rules-based issue generation.
+
 ## What it does
 
 The workflow inspects lightweight repository signals such as:
@@ -22,24 +39,23 @@ The workflow inspects lightweight repository signals such as:
 
 It then writes issue payloads and opens GitHub issues using the repository token.
 
+## Required GitHub configuration
+
+### Repository secrets
+
+- `OPENAI_API_KEY`
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+
+### Repository variables
+
+- `OPENAI_MODEL`
+- `ISSUE_GENERATOR_TITLE_PREFIX`
+- `ISSUE_GENERATOR_MAX_ISSUES`
+
 ## Notes
 
-- this is rules-based automation, not a hosted LLM
-- it is still CI/CD-adjacent because it runs in GitHub Actions and automates repo maintenance
 - duplicate open issues are skipped by title
-
-## Inputs
-
-- `title_prefix`: prefix for generated issue titles
-- `max_issues`: maximum number of issues to create
-
-## Permissions
-
-The workflow requires:
-
-- `contents: read`
-- `issues: write`
-
-## Future upgrade path
-
-Later, this can be upgraded to use an external model provider or GitHub-hosted AI tooling to generate richer issue content.
+- hosted generation is best for richer issue descriptions
+- fallback generation keeps the workflow usable without model access

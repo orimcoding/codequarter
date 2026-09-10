@@ -38,11 +38,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Create issue payloads
         env:
-          TITLE_PREFIX: ${{ github.event.inputs.title_prefix || 'ai' }}
-          MAX_ISSUES: ${{ github.event.inputs.max_issues || '5' }}
+          TITLE_PREFIX: ${{ github.event.inputs.title_prefix || vars.ISSUE_GENERATOR_TITLE_PREFIX || 'ai' }}
+          MAX_ISSUES: ${{ github.event.inputs.max_issues || vars.ISSUE_GENERATOR_MAX_ISSUES || '5' }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4.1-mini' }}
+          ISSUE_GENERATOR_TITLE_PREFIX: ${{ vars.ISSUE_GENERATOR_TITLE_PREFIX || 'ai' }}
+          ISSUE_GENERATOR_MAX_ISSUES: ${{ vars.ISSUE_GENERATOR_MAX_ISSUES || '5' }}
         run: |
           node .github/scripts/generate-issues.mjs
 
