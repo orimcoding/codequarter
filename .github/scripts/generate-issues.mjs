@@ -3,6 +3,27 @@ import path from 'node:path';
 import OpenAI from 'openai';
 
 const root = process.cwd();
+const envLocalPath = path.join(root, '.env.local');
+
+if (fs.existsSync(envLocalPath)) {
+  const envLines = fs.readFileSync(envLocalPath, 'utf8').split(/\r?\n/);
+  for (const line of envLines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+
+    const separatorIndex = trimmed.indexOf('=');
+    if (separatorIndex === -1) continue;
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    const rawValue = trimmed.slice(separatorIndex + 1).trim();
+    const value = rawValue.replace(/^['"]|['"]$/g, '');
+
+    if (!(key in process.env)) {
+      process.env[key] = value;
+    }
+  }
+}
+
 const maxIssues = Number.parseInt(process.env.MAX_ISSUES || process.env.ISSUE_GENERATOR_MAX_ISSUES || '5', 10);
 const titlePrefix = process.env.TITLE_PREFIX || process.env.ISSUE_GENERATOR_TITLE_PREFIX || 'ai';
 const model = process.env.OPENAI_MODEL || 'gpt-4.1-mini';
@@ -12,6 +33,15 @@ function readIfExists(relativePath) {
   const fullPath = path.join(root, relativePath);
   if (!fs.existsSync(fullPath)) return '';
   return fs.readFileSync(fullPath, 'utf8');
+}
+
+function readMany(relativePaths, maxCharsPerFile = 8000) {
+  return relativePaths
+    .map((relativePath) => ({
+      path: relativePath,
+      content: readIfExists(relativePath).slice(0, maxCharsPerFile),
+    }))
+    .filter((entry) => entry.content);
 }
 
 function listFiles(relativeDir) {
@@ -119,15 +149,22 @@ async function buildHostedIssues(context) {
 
   const client = new OpenAI({ apiKey: openAiApiKey });
   const prompt = [
-    'You are generating GitHub issues for a software repository.',
+    'You are a senior product and engineering lead generating a practical GitHub backlog for a software repository.',
     'Return strict JSON only.',
-    'Return an array of issue objects with this shape:',
+    'Return an array of issue objects with this exact shape:',
     '[{"title":"string","body":"markdown string","labels":["label"]}]',
     `Generate at most ${maxIssues} issues.`,
     `Prefix every title with [${titlePrefix}].`,
-    'Only create actionable, non-duplicate, implementation-ready issues.',
-    'Prefer CI/CD, documentation, testing, deployment, and project-foundation tasks.',
-    'Repository context follows.',
+    'Generate the most important missing issues needed to turn this repository into a production-ready product.',
+    'Cover a balanced mix of product features, UI/UX, architecture, API work, 3D experience, testing, CI/CD, security, observability, documentation, onboarding, and release readiness.',
+    'Prefer concrete implementation tasks over vague ideas.',
+    'Avoid duplicates, avoid trivial chores, and avoid issues for work that already appears implemented.',
+    'Each issue body must include these markdown sections in order: ## Summary, ## Why, ## Scope, ## Suggested acceptance criteria.',
+    'Acceptance criteria must be specific and testable.',
+    'Use labels that reflect the work, such as enhancement, frontend, backend, 3d, testing, ci, docs, security, performance, ux, infrastructure, ai-generated.',
+    'Always include ai-generated as one label.',
+    'Assume the current repository is early-stage and needs both foundation and feature work.',
+    'Repository context follows as JSON.',
     JSON.stringify(context),
   ].join('\n');
 
@@ -153,14 +190,32 @@ const readme = readIfExists('README.md');
 const packageJson = readIfExists('package.json');
 const tsconfig = readIfExists('tsconfig.json');
 const workflowFiles = listFiles('.github/workflows');
-const srcFiles = listFiles('src').slice(0, 100);
+const srcFiles = listFiles('src').slice(0, 200);
+const docsFiles = listFiles('docs').slice(0, 100);
+const keyFiles = readMany([
+  'README.md',
+  'package.json',
+  'tsconfig.json',
+  'next.config.ts',
+  'src/app/page.tsx',
+  'src/app/layout.tsx',
+  'docs/ci-cd.md',
+  'docs/ai-issue-generator.md',
+  '.github/workflows/ci.yml',
+  '.github/workflows/deploy-preview.yml',
+  '.github/workflows/deploy-production.yml',
+  '.github/workflows/issue-generator.yml',
+]);
 
 const context = {
+  projectName: path.basename(root),
   readme: readme.slice(0, 12000),
   packageJson,
   tsconfig,
   workflowFiles,
   srcFiles,
+  docsFiles,
+  keyFiles,
 };
 
 const fallbackIssues = buildFallbackIssues({ readme, packageJson, workflowFiles, srcFiles });
