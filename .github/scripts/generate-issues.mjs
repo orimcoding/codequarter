@@ -29,6 +29,11 @@ const titlePrefix = process.env.TITLE_PREFIX || process.env.ISSUE_GENERATOR_TITL
 const model = process.env.OPENAI_MODEL || 'gpt-4.1-mini';
 const openAiApiKey = process.env.OPENAI_API_KEY;
 
+console.log('[issue-generator] OpenAI enabled:', openAiApiKey ? 'yes' : 'no');
+console.log('[issue-generator] Model:', model);
+console.log('[issue-generator] Title prefix:', titlePrefix);
+console.log('[issue-generator] Max issues:', maxIssues);
+
 function readIfExists(relativePath) {
   const fullPath = path.join(root, relativePath);
   if (!fs.existsSync(fullPath)) return '';
