@@ -1,0 +1,131 @@
+[
+  {
+    "title": "[ai] Implement interactive 3D visualization for codebase spatial navigation",
+    "body": "## Summary\n\nDevelop a core interactive 3D interface that visually and spatially represents features, components, APIs, services, and dependencies as physical spaces (rooms, workspaces, doors, etc.) using React Three Fiber.\n\n## Why\n\nThe primary product value proposition is an immersive 3D environment that helps developers explore codebases spatially. Without this, the product is not usable or differentiated.\n\n## Scope\n\n- Render 3D models representing architectural entities mapped from the codebase.\n- Implement interactive navigation controls (camera movement, selection).\n- Integrate basic UI overlays or tooltips for element metadata.\n\n## Suggested acceptance criteria\n\n- User can navigate a 3D representation of a simple sample codebase.\n- Rooms (features), workspaces (components), doors (APIs), and hallways (dependencies) are visually distinct.\n- Entities show basic metadata on hover or click.\n- Navigation uses keyboard and mouse controls fluidly without noticeable lag.\n- It is implemented within the existing React and three.js stack.\n",
+    "labels": [
+      "enhancement",
+      "frontend",
+      "3d",
+      "ux",
+      "ai-generated"
+    ]
+  },
+  {
+    "title": "[ai] Develop backend codebase parser to map source files into architectural entities",
+    "body": "## Summary\n\nCreate a backend service or module using ts-morph to analyze TypeScript/JavaScript codebases and produce structured data representing features, components, APIs, services, and their dependencies.\n\n## Why\n\nAccurate and automated codebase parsing is required to transform source code into spatial 3D model components. Manual mapping would not scale.\n\n## Scope\n\n- Parse input repo and extract features, components, APIs, services, dependencies.\n- Output a JSON model suitable for the frontend 3D renderer.\n- Handle basic complexity (modules, imports, exports).\n\n## Suggested acceptance criteria\n\n- Given a sample TypeScript project, the parser outputs a JSON mapping all entities with correct hierarchical relationships.\n- Includes APIs (functions or endpoints), services (modules), dependencies (imports).\n- Has coverage for basic error handling and logs parsing process.\n- Unit test coverage for major parser functions above 70%.\n",
+    "labels": [
+      "backend",
+      "architecture",
+      "ai-generated",
+      "enhancement",
+      "testing"
+    ]
+  },
+  {
+    "title": "[ai] Integrate authentication and secure access control for the 3D office",
+    "body": "## Summary\n\nImplement user authentication (e.g., via OAuth or JWT) and role-based access control to secure access to the codequarter interface.\n\n## Why\n\nSecurity is crucial for production readiness to protect codebase data and user information. Unauthorized access risks data leaks.\n\n## Scope\n\n- Add login/logout flows.\n- Support roles and permissions (viewer, editor).\n- Protect API endpoints and frontend routes accordingly.\n\n## Suggested acceptance criteria\n\n- Users can register/login via a secure method.\n- Access to the 3D environment is restricted to authenticated users.\n- Unauthorized users get redirected to the login page.\n- Role permissions dictate UI features available.\n- Includes backend validation of tokens on APIs.\n- Security audit of authentication logic completed.\n",
+    "labels": [
+      "security",
+      "backend",
+      "frontend",
+      "enhancement",
+      "ai-generated"
+    ]
+  },
+  {
+    "title": "[ai] Build automated end-to-end testing suite covering 3D navigation and UI flows",
+    "body": "## Summary\n\nDevelop comprehensive automated end-to-end tests for critical user flows including 3D navigation, element interaction, and user onboarding.\n\n## Why\n\nEarly-stage projects require robust automated tests to prevent regressions and ensure reliability as new features are added.\n\n## Scope\n\n- Use Playwright or Cypress.\n- Cover navigation controls, metadata display interaction, login flow.\n- Validate visual correctness where feasible.\n\n## Suggested acceptance criteria\n\n- Test suite runs in CI environment and passes reliably.\n- Tests cover navigation in 3D office for at least 3 architectural entity types.\n- Interaction testing includes hover and click showing metadata.\n- Login/logout flows validated with test users.\n- Documentation on how to run tests locally and in CI.\n",
+    "labels": [
+      "testing",
+      "frontend",
+      "ci",
+      "ai-generated",
+      "ux"
+    ]
+  },
+  {
+    "title": "[ai] Add real-time observability and error reporting in production environment",
+    "body": "## Summary\n\nSet up observability tooling including logging, error reporting, and performance monitoring for both frontend and backend in production.\n\n## Why\n\nMonitoring is essential for understanding app health, diagnosing issues, and improving user experience in production.\n\n## Scope\n\n- Integrate Sentry or similar for error tracking.\n- Add frontend and backend performance metrics collection.\n- Configure alerting and dashboards.\n\n## Suggested acceptance criteria\n\n- Errors and unhandled exceptions are reported automatically.\n- Latency and usage metrics are collected and visible on dashboards.\n- Production logs include structured data for debugging.\n- Alert rules trigger notifications for critical errors.\n- Documentation added describing observability setup.\n",
+    "labels": [
+      "observability",
+      "backend",
+      "frontend",
+      "infrastructure",
+      "ai-generated",
+      "enhancement"
+    ]
+  },
+  {
+    "title": "[ai] Create developer onboarding documentation with setup, architecture, and usage guides",
+    "body": "## Summary\n\nWrite comprehensive onboarding documentation to help new developers understand how to set up the repo, grasp overall architecture, and contribute effectively.\n\n## Why\n\nGood documentation accelerates contributor ramp-up time and improves community engagement.\n\n## Scope\n\n- Setup instructions for local development.\n- High-level architecture overview describing 3D mappings.\n- Coding standards and workflow explanation.\n- Instructions for running tests and submitting PRs.\n\n## Suggested acceptance criteria\n\n- README and docs folders include above documentation topics.\n- Documentation reviewed and approved by at least two team members.\n- Includes example commands for installation, dev server, tests.\n- Clear explanation of codebase entities and mappings.\n",
+    "labels": [
+      "docs",
+      "enhancement",
+      "ai-generated"
+    ]
+  },
+  {
+    "title": "[ai] Implement API to serve parsed architectural data to frontend dynamically",
+    "body": "## Summary\n\nDevelop REST or GraphQL API endpoints that supply the frontend with the parsed codebase structure and metadata needed to render the 3D environment.\n\n## Why\n\nThe frontend requires live, dynamic data representing codebase state to enable up-to-date 3D visualization.\n\n## Scope\n\n- Define API schema for architectural entities.\n- Serve parsed JSON data on demand.\n- Include filtering and pagination if needed.\n\n## Suggested acceptance criteria\n\n- API endpoints return valid JSON conforming to schema.\n- Frontend successfully fetches and renders data from API.\n- API handles errors gracefully and provides useful error messages.\n- Endpoints have basic authentication checks if needed.\n- Document API specification.\n",
+    "labels": [
+      "backend",
+      "api",
+      "enhancement",
+      "ai-generated"
+    ]
+  },
+  {
+    "title": "[ai] Optimize frontend performance for rendering complex 3D scenes",
+    "body": "## Summary\n\nImprove frontend rendering performance of the 3D scene to ensure smooth interaction on a range of devices and codebase sizes.\n\n## Why\n\nSmooth, low-latency 3D experiences are critical for usability and product success, especially as scene complexity grows.\n\n## Scope\n\n- Profile rendering bottlenecks.\n- Implement techniques such as lazy loading, level of detail (LOD), and memoization.\n- Optimize React component updates.\n\n## Suggested acceptance criteria\n\n- Frame rate meets or exceeds 60fps on benchmark scenes.\n- CPU and GPU usage remain within acceptable thresholds under heavy load.\n- Visual fidelity remains intact after optimizations.\n- Performance test reports included.\n",
+    "labels": [
+      "performance",
+      "frontend",
+      "3d",
+      "enhancement",
+      "ai-generated"
+    ]
+  },
+  {
+    "title": "[ai] Refine and improve UI/UX for ease of spatial navigation and discovery",
+    "body": "## Summary\n\nEnhance the user interface and experience around navigating the 3D office, including controls, UI hints, and spatial audio if feasible.\n\n## Why\n\nA usable and intuitive navigation experience reduces onboarding time and user frustration, improving overall adoption.\n\n## Scope\n\n- Improve navigation controls responsiveness and intuitiveness.\n- Add visual cues like minimap, breadcrumbs.\n- Implement contextual help and tutorials.\n\n## Suggested acceptance criteria\n\n- Navigation controls tested for ease on keyboard, mouse, gamepad.\n- Visual UI elements assist in orientation and discovery.\n- Onboarding tutorial walks new users through core navigation and interaction.\n- User feedback incorporated from initial usability testing.\n",
+    "labels": [
+      "ux",
+      "frontend",
+      "enhancement",
+      "ai-generated"
+    ]
+  },
+  {
+    "title": "[ai] Configure robust CI/CD pipelines with automated tests and deployments",
+    "body": "## Summary\n\nEnhance existing GitHub Actions workflows to fully automate linting, testing, building, and deploying previews and production releases.\n\n## Why\n\nReliable automated pipelines reduce manual errors, enforce quality, and consistently deliver new versions.\n\n## Scope\n\n- Add test running steps to CI workflow.\n- Ensure preview and production deploy workflows run only after successful tests.\n- Add notifications on failures.\n\n## Suggested acceptance criteria\n\n- CI pipeline runs lint, type checks, tests, and builds successfully on PRs.\n- Preview deploy triggers on staging branches automatically.\n- Production deploy only proceeds on passing CI.\n- Failures send notifications via GitHub or Slack.\n- Documentation updated reflecting pipelines.\n",
+    "labels": [
+      "ci",
+      "cd",
+      "infrastructure",
+      "testing",
+      "ai-generated"
+    ]
+  },
+  {
+    "title": "[ai] Implement environment configuration and secret management for deployments",
+    "body": "## Summary\n\nEstablish a standardized approach for managing environment variables and secrets (API keys, tokens) required during development and deployment.\n\n## Why\n\nProper secret management protects sensitive data and supports consistent deployments across environments.\n\n## Scope\n\n- Define .env files, GitHub secrets, and Vercel environment variables usage.\n- Validate secrets presence in CI/CD workflows to skip unsafe deploys.\n- Document configuration steps for contributors.\n\n## Suggested acceptance criteria\n\n- Secrets for Vercel and OpenAI API keys are securely stored outside codebase.\n- Deploy workflows conditionally run based on secret availability.\n- Missing secrets trigger warnings and skips deploys.\n- Documentation clearly instructs setup.\n",
+    "labels": [
+      "security",
+      "ci",
+      "infrastructure",
+      "docs",
+      "ai-generated"
+    ]
+  },
+  {
+    "title": "[ai] Define release process including versioning, changelog, and tagging",
+    "body": "## Summary\n\nCreate a documented and automated release process that includes semantic versioning, changelog generation, and Git tagging to support structured product deliveries.\n\n## Why\n\nA defined release process is critical for product maturity, traceability, and user communication.\n\n## Scope\n\n- Define versioning scheme (e.g., semver).\n- Automate changelog generation from commit messages.\n- Automate Git tags and GitHub releases.\n- Document process and whom to notify on release.\n\n## Suggested acceptance criteria\n\n- Releases created through the process include accurate changelog.\n- Tags follow consistent naming conventions.\n- Release automation integrated with CI/CD.\n- Documentation guides on creating new releases.\n",
+    "labels": [
+      "release",
+      "ci",
+      "docs",
+      "infrastructure",
+      "ai-generated"
+    ]
+  }
+]
